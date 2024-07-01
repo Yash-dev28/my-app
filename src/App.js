@@ -1,25 +1,112 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
-function App() {
+const ChildComponent = ({ number }) => <div>Child Component {number}</div>;
+
+const App = () => {
+  const records = ['Record 1', 'Record 2', 'Record 3', 'Test 1', 'Example 2', 'Sample 3'];
+  const [isVisible, setIsVisible] = useState(true);
+  const [inputValue, setInputValue] = useState('');
+  const [text, setText] = useState('');
+  const [components, setComponents] = useState([]);
+  const [num1, setNum1] = useState(0);
+  const [num2, setNum2] = useState(0);
+  const [sum, setSum] = useState(0);
+  const [counter, setCounter] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const addComponent = () => {
+    setComponents([...components, components.length + 1]);
+  };
+
+  const calculateSum = () => {
+    setSum(Number(num1) + Number(num2));
+  };
+
+  const increaseCounter = () => {
+    setCounter(counter + 1);
+  };
+
+  const decreaseCounter = () => {
+    setCounter(counter - 1);
+  };
+
+  const filteredRecords = records.filter(record =>
+    record.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Hello, World!</h1>
+
+      <h2>Records List</h2>
+      <ul>
+        {records.map((record, index) => (
+          <li key={index}>{record}</li>
+        ))}
+      </ul>
+
+      <h2>Show/Hide Element</h2>
+      <button onClick={() => setIsVisible(!isVisible)}>
+        {isVisible ? 'Hide' : 'Show'}
+      </button>
+      {isVisible && <p>This is a toggled paragraph.</p>}
+
+      <h2>Enable/Disable Button</h2>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+      <button disabled={!inputValue}>Submit</button>
+
+      <h2>Two-way Data Binding</h2>
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <p>{text}</p>
+
+      <h2>Dynamically Add Child Components</h2>
+      <button onClick={addComponent}>Add Component</button>
+      {components.map((number, index) => (
+        <ChildComponent key={index} number={number} />
+      ))}
+
+      <h2>Sum of Two Numbers</h2>
+      <input
+        type="number"
+        value={num1}
+        onChange={(e) => setNum1(e.target.value)}
+      />
+      <input
+        type="number"
+        value={num2}
+        onChange={(e) => setNum2(e.target.value)}
+      />
+      <button onClick={calculateSum}>Calculate</button>
+      <p>Sum: {sum}</p>
+
+      <h2>Counter</h2>
+      <button onClick={decreaseCounter}>Decrease</button>
+      <span> {counter} </span>
+      <button onClick={increaseCounter}>Increase</button>
+
+      <h2>Search Filter</h2>
+      <input
+        type="text"
+        placeholder="Search records..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <ul>
+        {filteredRecords.map((record, index) => (
+          <li key={index}>{record}</li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
 export default App;
